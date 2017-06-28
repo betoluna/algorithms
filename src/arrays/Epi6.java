@@ -223,6 +223,11 @@ public class Epi6 {
         return hi;
     }
 
+    public static int findFirstMissingPositive(int[] A) {
+
+        return 0;
+    }
+
     public static void main(String[] args) {
         int[] a = {3,5,1,4,1,7};
         //int[] a = {2,1,1,1,1,1};
