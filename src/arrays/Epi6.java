@@ -224,17 +224,42 @@ public class Epi6 {
     }
 
     public static int findFirstMissingPositive(int[] A) {
+        Arrays.sort(A);
+        int firstPositive = Integer.MAX_VALUE;
+        int i = 1;
+        while(i < A.length) {
+            //when you find a positive, find out if there is
+            //a positive gap between A[i] and A[i - 1]
+            if(A[i] > 0) {
+                if (A[i] - A[i - 1] > 1 && A[i - 1] >= 0) {//there is a gap
+                    int tmp = A[i - 1] + 1;
+                    if(tmp < firstPositive) firstPositive = tmp;
+                }
+            }
+            i++;
+        }
 
-        return 0;
+        if(firstPositive == Integer.MAX_VALUE) {//if not found yet
+            if(A[A.length - 1] <= 0) {// if all negative array
+                firstPositive = 1;
+            } else { // all positive numbers in array are consecutive
+                firstPositive = A[A.length - 1] + 1;
+            }
+        }
+
+        return firstPositive;
     }
 
     public static void main(String[] args) {
         int[] a = {3,5,1,4,1,7};
         //int[] a = {2,1,1,1,1,1};
-        show(a);
-        System.out.println(removeKey(a, 1));
+        //int[] a = {0,1,2,3,4};
+//        show(a);
+//        System.out.println(removeKey(a, 1));
 
         //System.out.println(l.toString());
+
+        System.out.println(findFirstMissingPositive(a));
 
     }
 }
