@@ -210,17 +210,25 @@ public class Epi6 {
     //and slides elements to left to fill gaps.
     //Return number of elements left.
     public static int removeDupsFromSortedArr(int[] A) {
-        int hi = A.length;
-        for(int i = 1; i < hi; i++) {
-            while(A[i] == A[i - 1] && hi > i) {
-                for(int j = i + 1; j < hi; j++) {
-                    A[j - 1] = A[j];
-                }
-                hi--;//after sliding elements, decrease hi
+        int tmp = 1;
+        for(int i = 1; i < A.length; i++) {
+            if(!(A[i] == A[tmp - 1])) {
+                A[tmp++] = A[i];
             }
         }
+        return tmp;
 
-        return hi;
+//        int hi = A.length;
+//        for(int i = 1; i < hi; i++) {
+//            while(A[i] == A[i - 1] && hi > i) {
+//                for(int j = i + 1; j < hi; j++) {
+//                    A[j - 1] = A[j];
+//                }
+//                hi--;//after sliding elements, decrease hi
+//            }
+//        }
+//
+//        return hi;
     }
 
     public static int findFirstMissingPositive(int[] A) {
@@ -256,13 +264,13 @@ public class Epi6 {
     public static void main(String[] args) {
         //int[] a = {3,5,1,4,1,7};
         //int[] a = {2,1,1,1,1,1};
-        int[] a = {1,2,3,4};
-//        show(a);
-//        System.out.println(removeKey(a, 1));
+        int[] a = {1,2,3,3,3,3,4};
+        show(a);
+        System.out.println(removeDupsFromSortedArr(a));
 
         //System.out.println(l.toString());
 
-        System.out.println(findFirstMissingPositive(a));
+        //System.out.println(findFirstMissingPositive(a));
 
     }
 }
