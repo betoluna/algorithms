@@ -225,35 +225,38 @@ public class Epi6 {
 
     public static int findFirstMissingPositive(int[] A) {
         Arrays.sort(A);
-        int firstPositive = Integer.MAX_VALUE;
+        show(A);
+        int fmp = Integer.MAX_VALUE;
         int i = 1;
         while(i < A.length) {
             //when you find a positive, find out if there is
             //a positive gap between A[i] and A[i - 1]
-            if(A[i] > 0) {
-                if (A[i] - A[i - 1] > 1 && A[i - 1] >= 0) {//there is a gap
+            if(A[i] >= 2) {
+                if (A[i - 1] <= 0) {
+                    fmp = 1;
+                } else if(A[i] - A[i - 1] > 1){
                     int tmp = A[i - 1] + 1;
-                    if(tmp < firstPositive) firstPositive = tmp;
+                    if(tmp < fmp) fmp = tmp;
                 }
             }
             i++;
         }
 
-        if(firstPositive == Integer.MAX_VALUE) {//if not found yet
+        if(fmp == Integer.MAX_VALUE) {//if not found yet
             if(A[A.length - 1] <= 0) {// if all negative array
-                firstPositive = 1;
+                fmp = 1;
             } else { // all positive numbers in array are consecutive
-                firstPositive = A[A.length - 1] + 1;
+                fmp = A[A.length - 1] + 1;
             }
         }
 
-        return firstPositive;
+        return fmp;
     }
 
     public static void main(String[] args) {
-        int[] a = {3,5,1,4,1,7};
+        //int[] a = {3,5,1,4,1,7};
         //int[] a = {2,1,1,1,1,1};
-        //int[] a = {0,1,2,3,4};
+        int[] a = {1,2,3,4};
 //        show(a);
 //        System.out.println(removeKey(a, 1));
 
