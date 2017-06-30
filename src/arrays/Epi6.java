@@ -261,16 +261,32 @@ public class Epi6 {
         return fmp;
     }
 
+    public static boolean isPalindrome(int x) {
+        if(x < 0) return false;
+
+        String s = String.valueOf(x);
+        for(int i = 0, j = s.length() - 1; i < s.length() / 2 && j >= s.length() / 2; i++, j--) {
+            if(s.charAt(i) != s.charAt(j)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static void main(String[] args) {
         //int[] a = {3,5,1,4,1,7};
         //int[] a = {2,1,1,1,1,1};
         int[] a = {1,2,3,3,3,3,4};
-        show(a);
-        System.out.println(removeDupsFromSortedArr(a));
+//        show(a);
+//        System.out.println(removeDupsFromSortedArr(a));
 
-        //System.out.println(l.toString());
+        int x = -1233321;
 
-        //System.out.println(findFirstMissingPositive(a));
+        //System.out.println((int)Math.log10(x) + 1);
+        //System.out.println(Math.pow(10, (int)Math.log10(x)));
+
+        System.out.println(isPalindrome(x));
 
     }
 }
