@@ -231,9 +231,10 @@ public class Epi6 {
 //        return hi;
     }
 
+    //O(nlogn) because of sorting
     public static int findFirstMissingPositive(int[] A) {
         Arrays.sort(A);
-        show(A);
+        //show(A);
         int fmp = Integer.MAX_VALUE;
         int i = 1;
         while(i < A.length) {
@@ -261,9 +262,29 @@ public class Epi6 {
         return fmp;
     }
 
+    //find first missing positive O(n) in A w/o sorting but O(n) extra space
+    public static int findMissingPositive(int[] A) {
+        Set<Integer> set = new HashSet<>();
+        for(int i = 0; i < A.length; i++) {
+            if(A[i] > 0) set.add(A[i]);
+        }
+
+        //find the 1st missing positive if it exist
+        int i;
+        for(i = 1; i <= set.size(); i++) {
+            if(!set.contains(i)) return i;//return 1st missing
+        }
+
+        //note that i increases past the set.size() on the
+        //last iteration before it fails the loop condition
+        return i;
+    }
+
+    // uses String operations to check if an int is a palindrome
     public static boolean isPalindrome(int x) {
         if(x < 0) return false;
 
+        //converting to a String
         String s = String.valueOf(x);
         for(int i = 0, j = s.length() - 1; i < s.length() / 2 && j >= s.length() / 2; i++, j--) {
             if(s.charAt(i) != s.charAt(j)) {
@@ -274,19 +295,40 @@ public class Epi6 {
         return true;
     }
 
+    //uses Math ops (no String) to check if an int is a palindrome
+    //x has to be <= to Integer.MAX_VALUE
+    public static boolean isIntPalindrome(int x) {
+        if(x < 0) return false;
+
+        int numOfDigits = (int)Math.floor(Math.log10(x)) + 1;
+        int mask = (int)Math.pow(10, numOfDigits - 1);
+
+        for(int i = 0; i < numOfDigits / 2; i++) {
+            //compare most and least significant digits
+            int msd = x / mask;
+            int lsd = x % 10;
+            if(msd != lsd) {
+                return false;
+            }
+            //remove msd & lsd
+            x %= mask;
+            x /= 10;
+            //reduce the mask accordingly
+            mask /= 100;
+        }
+
+        return true;
+    }
+
     public static void main(String[] args) {
-        //int[] a = {3,5,1,4,1,7};
+        int[] a = {3,5,1,4,1,7};
         //int[] a = {2,1,1,1,1,1};
-        int[] a = {1,2,3,3,3,3,4};
-//        show(a);
-//        System.out.println(removeDupsFromSortedArr(a));
+        //int[] a = {1,2,3,3,3,3,4};
 
-        int x = -1233321;
+        System.out.println(findMissingPositive(a));
+        System.out.println();
 
-        //System.out.println((int)Math.log10(x) + 1);
-        //System.out.println(Math.pow(10, (int)Math.log10(x)));
 
-        System.out.println(isPalindrome(x));
 
     }
 }
