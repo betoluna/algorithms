@@ -1,6 +1,5 @@
 package arrays;
 
-import helper.Utl;
 /**
  * Created by beto on 5/23/17.
  * Divide and Conquer paradigm. Java implementation of

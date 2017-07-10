@@ -1,6 +1,6 @@
 package Sort;
 
-import helper.Utl;
+import helper.A;
 
 /**
  * Created by beto on 5/18/17.
@@ -11,8 +11,8 @@ public class Insertion {
 
         for(int i = 1; i < a.length; i++) {
 
-            for(int j = i; j > 0 && Utl.less(a[j], a[j - 1]); j--) {
-                Utl.exch(a, j, j - 1);
+            for(int j = i; j > 0 && A.less(a[j], a[j - 1]); j--) {
+                A.swap(a, j, j - 1);
             }
         }
     }
@@ -21,8 +21,8 @@ public class Insertion {
 
         for(int i = 1; i < a.length; i++) {
 
-            for(int j = i; j > 0 && Utl.less(a[j], a[j - 1]); j--) {
-                Utl.exch(a, j, j - 1);
+            for(int j = i; j > 0 && A.less(a[j], a[j - 1]); j--) {
+                A.swap(a, j, j - 1);
             }
         }
     }
@@ -30,10 +30,10 @@ public class Insertion {
     public static void main(String[] args) {
 
         Comparable[] arr = {"n", "e", "w", "r", "z", "M"};
-        int[] a = Utl.generateIntArray(20, 10, 30);
-        Utl.show(a);
+        int[] a = A.generateIntArray(20, 10, 30);
+        A.show(a);
         sort(a);
-        Utl.show(a);
+        A.show(a);
 
 
     }

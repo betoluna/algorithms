@@ -3,6 +3,10 @@ package arrays;
 import java.math.BigInteger;
 import java.util.*;
 
+import helper.A;
+
+//import static helper.A.reverse;
+
 /**
  * Created by beto on 6/13/17.
  */
@@ -172,13 +176,6 @@ public class Epi6 {
         return bigInt;
     }
 
-    private static void show(int[] a) {
-        for(int i = 0; i < a.length; i++) {
-            System.out.print(a[i] + " ");
-        }
-        System.out.println();
-    }
-
     // return the number of elements
     public static int removeKey(int[] A, int key) {
         int hi = A.length;
@@ -320,14 +317,114 @@ public class Epi6 {
         return true;
     }
 
+    //Optimized find 1st missing positive in A. O(n), O(1) extra space
+    public static int findMissingPositiv(int[] A) {
+        //1st pass, if A[i] in range of interest (1 - A.length) and elem at index where
+        //this elem would finally have to go (A[A[i] - 1) not equal to this elem (A[i])
+        int i = 0;
+        while(i < A.length) {
+            if(A[i] > 0 && A[i] <= A.length && A[A[i] - 1] != A[i]) {
+                //swap
+                int tmp = A[A[i] - 1];
+                A[A[i] - 1] = A[i];
+                A[i] = tmp;
+            } else {
+                i++;
+            }
+        }
+
+        //2nd pass
+        for(int j = 0; j < A.length; j++) {
+            if(A[j] != j + 1) {
+                return j + 1;
+            }
+        }
+
+        return A.length + 1;
+    }
+
+    //find next permutation under dictionary ordering
+    public static boolean findNextPermutation(int[] A) {
+        int i = A.length - 2;
+        //find longest decreasing eg [2,3,1] subarray from the end if it exists
+        while(i >= 0 && A[i] > A[i + 1]) {
+            i--;
+        }
+
+        //A is already the largest permutation under dictionary ordering
+        if(i < 0) return false;
+
+        //find & swap 1st 'entry' to left of the subarray with
+        //smallest that is greater than 'entry' in found subarray
+        int j = A.length - 1;
+        while(A[j] <= A[i]) {
+            j--;
+        }
+        int tmp = A[i];
+        A[i] = A[j];
+        A[j] = tmp;
+
+        //Swap. Reorganize subarray in increasing order to
+        //make permutation the smallest next possible
+        i = i + 1;
+        j = A.length - 1;
+        while(j >= i) {
+            tmp = A[i];
+            A[i++] = A[j];
+            A[j--] = tmp;
+        }
+
+        return true;
+    }
+
+    //rotate array clockwise by k entries. O(nk) time, O(1) extra memory
+    public static void rotateArrayByK(int[] A, int k) {
+        if(k <= 0 || k >= A.length) return;// do nothing
+
+        int times = 0;
+        int i = k;
+        int tmp = A[k];
+        while(times < k) {
+            if(i == -1) i = A.length - 1;
+
+            if(i == 0) {
+                if(k == A.length - 1) {//corner case for k
+                    A[i] = tmp;
+                    tmp = A[A.length - 1];
+                    times++;//whole turn completed
+                } else {
+                    A[i] = A[A.length - 1];
+                }
+            } else {
+                if(i - 1 == k) {//whole turn completed
+                    A[i] = tmp;
+                    tmp = A[i - 1];
+                    times++;
+                } else {//most usual case
+                    A[i] = A[i - 1];
+                }
+            }
+            i--;
+        }
+    }
+
+    //optimized rotateArray by k using reverse. O(n) time, O(1) space
+    public static void rotateArray(int[] a, int k) {
+        int i = k % a.length;
+
+        A.reverse(a, 0, a.length);
+        A.reverse(a, 0, i);
+        A.reverse(a, i, a.length);
+    }
+
     public static void main(String[] args) {
-        int[] a = {3,5,1,4,1,7};
+        //int[] a = {3,5,1,4,1,7};
         //int[] a = {2,1,1,1,1,1};
         //int[] a = {1,2,3,3,3,3,4};
-
-        System.out.println(findMissingPositive(a));
-        System.out.println();
-
+        int[] a = {6,2,1,5,4,3,0};
+        A.show(a);
+        rotateArray(a, 9);
+        A.show(a);
 
 
     }

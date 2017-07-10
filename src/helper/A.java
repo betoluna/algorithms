@@ -3,9 +3,9 @@ package helper;
 import java.util.Random;
 
 /**
- * Created by beto on 5/18/17.
+ * Array helper functions. Created by beto on 5/18/17.
  */
-public class Utl {
+public class A {
 
     /*************************************************
      * Utl functions
@@ -16,13 +16,13 @@ public class Utl {
 
     public static boolean less(Comparable v, Comparable w) { return v.compareTo(w) < 0; }
 
-    public static void exch(int[] a, int i, int j) {
+    public static void swap(int[] a, int i, int j) {
         int temp = a[i];
         a[i] = a[j];
         a[j] = temp;
     }
 
-    public static void exch(Comparable[] a, int i, int j) {
+    public static void swap(Comparable[] a, int i, int j) {
         Comparable temp = a[i];
         a[i] = a[j];
         a[j] = temp;
@@ -42,7 +42,18 @@ public class Utl {
         System.out.println();
     }
 
+    //reverse int array in-place from lo (inclusive) to hi (exclusive)
+    public static void reverse(int[] A, int lo, int hi) {
+        if(A.length == 0) return;
 
+        hi = hi - 1;//move hi inside array bounds
+        int tmp;
+        while(hi >= lo) {
+            tmp = A[lo];
+            A[lo++] = A[hi];
+            A[hi--] = tmp;
+        }
+    }
 
     /*************************************************
      * Generate random numbers

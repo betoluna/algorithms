@@ -1,6 +1,6 @@
 package Sort;
 
-import helper.Utl;
+import helper.A;
 
 /**
  * Created by beto on 5/22/17.
@@ -61,11 +61,11 @@ public class Merge {
 
     // Test
     public static void main(String[] args) {
-        int[] a = Utl.generateIntArray(31, 0, 100);
+        int[] a = A.generateIntArray(31, 0, 100);
         //int[] a = {2,4,8,3,5,9,1};
-        Utl.show(a);
+        A.show(a);
         sort(a);
-        Utl.show(a);
+        A.show(a);
 
     }
 }
