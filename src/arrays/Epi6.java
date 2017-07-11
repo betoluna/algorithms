@@ -401,7 +401,7 @@ public class Epi6 {
                     tmp = A[i - 1];
                     times++;
                 } else {//most usual case
-                    A[i] = A[i - 1];
+                    A[i] = A[i - 1];//brute-force shift
                 }
             }
             i--;
@@ -417,15 +417,82 @@ public class Epi6 {
         A.reverse(a, i, a.length);
     }
 
+    //another brute force using mod operator. O(nk) time, O(1) space
+    public static void rotateArrByK(int[] A, int k) {
+        k %= A.length;
+
+        int step = k, j = k, i = k - 1, times = 0;
+        int buf = A[k];
+        while(times < k) {
+            //if turn completed
+            if(i == step) {
+                if(++times == k) break;
+                step = (step + 1) % A.length;//increase step
+            } else {
+                //shift to the right by one, brute-force
+                A[j--] = A[i--];
+            }
+
+            //simulate circular array by resetting
+            //i & j when falling out of array bounds
+            if(i < 0) i = A.length - 1;
+            if(j < 0) j = i + 1;
+        }
+        A[j] = buf;
+    }
+
+    //find the product of all entries minus one, not using implicit or explicit division
+    public static int maxProductMinusOne(int[] A) {
+        //identify neg or pos entry that contributes least to product
+        int smallestNonNegativeEntry = Integer.MAX_VALUE, sNonNegIdx = -1;
+        int smallestNegativeEntry = Integer.MIN_VALUE, sNegIdx = -1;
+        int largestNegativeEntry = Integer.MAX_VALUE, lNegIdx = -1;
+        int leastValueIndex, numOfNegatives = 0;
+        for(int i = 0; i < A.length; i++) {
+            if(A[i] < 0) {
+                numOfNegatives++;
+                if(A[i] > smallestNegativeEntry) {
+                    smallestNegativeEntry = A[i];
+                    sNegIdx = i;
+                }
+                if(A[i] < largestNegativeEntry) {
+                    largestNegativeEntry = A[i];
+                    lNegIdx = i;
+                }
+            } else {//A[i] is non-negative
+                if(A[i] < smallestNonNegativeEntry) {
+                    smallestNonNegativeEntry = A[i];
+                    sNonNegIdx = i;
+                }
+            }
+        }
+
+        //Assign leastValueIndex. RHS: if there are nonnegatives, skip smallest nonnegative element.
+        //If there are only negatives, and the number is odd, skip smallest negative element. Else,
+        //if there are only negatives and the number is even, skip the largest negative element.
+        leastValueIndex = numOfNegatives % 2 != 0 ? sNegIdx : (sNonNegIdx >= 0 ? sNonNegIdx : lNegIdx);
+
+        //multiply all entries minus the one found above. 2nd pass
+        int product = 1;
+        for(int i = 0; i < A.length; i++) {
+            if(i != leastValueIndex) {
+                product *= A[i];
+            }
+        }
+
+        return product;
+    }
+
     public static void main(String[] args) {
         //int[] a = {3,5,1,4,1,7};
         //int[] a = {2,1,1,1,1,1};
         //int[] a = {1,2,3,3,3,3,4};
-        int[] a = {6,2,1,5,4,3,0};
-        A.show(a);
-        rotateArray(a, 9);
-        A.show(a);
-
+        //int[] a = {6,2,1,5,4,3,0};
+        int[] a = {-6,2,1,5,4,3,0};
+        //A.show(a);
+        //rotateArrByK(a, 15);
+        System.out.println(maxProductMinusOne(a));
+        //A.show(a);
 
     }
 }
