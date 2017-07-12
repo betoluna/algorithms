@@ -441,7 +441,7 @@ public class Epi6 {
         A[j] = buf;
     }
 
-    //find the product of all entries minus one, not using implicit or explicit division
+    //find the product of n - 1 entries, not using implicit or explicit division
     public static int maxProductMinusOne(int[] A) {
         //identify neg or pos entry that contributes least to product
         int smallestNonNegativeEntry = Integer.MAX_VALUE, sNonNegIdx = -1;
@@ -473,6 +473,7 @@ public class Epi6 {
         leastValueIndex = numOfNegatives % 2 != 0 ? sNegIdx : (sNonNegIdx >= 0 ? sNonNegIdx : lNegIdx);
 
         //multiply all entries minus the one found above. 2nd pass
+        System.out.println(leastValueIndex);
         int product = 1;
         for(int i = 0; i < A.length; i++) {
             if(i != leastValueIndex) {
@@ -488,7 +489,7 @@ public class Epi6 {
         //int[] a = {2,1,1,1,1,1};
         //int[] a = {1,2,3,3,3,3,4};
         //int[] a = {6,2,1,5,4,3,0};
-        int[] a = {-6,2,1,5,4,3,0};
+        int[] a = {-2,-3,-4,-1,-5};
         //A.show(a);
         //rotateArrByK(a, 15);
         System.out.println(maxProductMinusOne(a));
