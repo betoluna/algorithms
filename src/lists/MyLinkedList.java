@@ -11,9 +11,13 @@ public class MyLinkedList {
 
     //construct an empty list
     public MyLinkedList() {
-        head = null;
-        tail = null;
+        head = tail = null;
         size = 0;
+    }
+
+    //return the head of the list
+    public Node getHead() {
+        return this.head;
     }
 
     //append a node to the list
@@ -34,8 +38,13 @@ public class MyLinkedList {
         return true;
     }
 
+    public void clear() {
+        head = tail = null;
+        size = 0;
+    }
+
     public Iterator iterator() {
-        return new ListIterator();
+        return new MyIterator();
     }
 
     //getters & setters
@@ -43,7 +52,7 @@ public class MyLinkedList {
         return size;
     }
 
-    private static class Node {
+    public class Node {
         //only singly linked for now
         private Node next;
         int value;
@@ -64,21 +73,31 @@ public class MyLinkedList {
         public Node getNext() { return next; }
     }
 
-    private class ListIterator implements Iterator {
+    private class MyIterator implements Iterator {
         private Node current = head;
 
         public boolean hasNext() {
-            return current.next != null;
+            return current != null;
         }
 
         public Integer next() {
             if(!hasNext()) {
                 throw new java.util.NoSuchElementException();
             }
-            //point current to next node and return its value
-            current = current.next;
-            return current.value;
+
+            int val = current.getValue();
+            current = current.getNext();//current moves to next node;
+            return val;
         }
+
+        //this op is unsupported for the moment
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+    public static void main(String[] args) {
 
     }
 }
