@@ -16,9 +16,13 @@ public class MyLinkedList {
     }
 
     //return the head of the list
-    public Node getHead() {
-        return this.head;
-    }
+    public Node getHead() { return head; }
+
+    public void setHead(Node n) { head = n; }
+
+    public Node getTail() { return tail; }
+
+    public void setTail(Node n) { tail = n; }
 
     //append a node to the list
     public boolean add(int val) {

@@ -8,7 +8,7 @@ import java.util.Random;
 public class A {
 
     /*************************************************
-     * Utl functions
+     * Utility functions
      ************************************************/
     public static boolean less(int v, int w) {
         return v < w;

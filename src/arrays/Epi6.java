@@ -484,16 +484,40 @@ public class Epi6 {
         return product;
     }
 
+    //argument must be a 9x9 2D array
+    public static boolean isSudokuValid(int[][] A) {
+        int gridSize = 3, a = 0, b = 1;
+        int row, col = 0;
+        for(row = 0; row < 9 && col < 9; row %= A.length) {
+            for(col = a * gridSize; col < b * gridSize; col++) {
+
+            }
+            row++;
+            //every time you went over all the rows,
+            //move to the next grids to the right
+            if(row == A.length) {
+                a++;
+                b++;
+            }
+        }
+
+        return false;
+    }
+
     public static void main(String[] args) {
         //int[] a = {3,5,1,4,1,7};
         //int[] a = {2,1,1,1,1,1};
         //int[] a = {1,2,3,3,3,3,4};
         //int[] a = {6,2,1,5,4,3,0};
-        int[] a = {-2,-3,-4,-1,-5};
+        //int[] a = {-2,-3,-4,-1,-5};
         //A.show(a);
         //rotateArrByK(a, 15);
-        System.out.println(maxProductMinusOne(a));
+        //System.out.println(maxProductMinusOne(a));
         //A.show(a);
+
+        int i = 9;
+        int alen = 9;
+        System.out.println(i % alen);
 
     }
 }
