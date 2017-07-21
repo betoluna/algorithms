@@ -484,24 +484,43 @@ public class Epi6 {
         return product;
     }
 
-    //argument must be a 9x9 2D array
+    //must pass a 9x9 2D array as argument
     public static boolean isSudokuValid(int[][] A) {
         int gridSize = 3, a = 0, b = 1;
-        int row, col = 0;
-        for(row = 0; row < 9 && col < 9; row %= A.length) {
-            for(col = a * gridSize; col < b * gridSize; col++) {
+        int row, col;
+        Set<Integer> set = new HashSet<>();
+        boolean proceed = true;
+        for(row = 0; proceed; row %= A.length) {
+            //clear map for next subgrid below
+            if(row == 0 || row == 3 || row == 6) set.clear();
 
+            for(col = a * gridSize; col < b * gridSize; col++) {
+                if(!set.isEmpty()) {
+                    if(set.contains(A[row][col]) && A[row][col] != 0) {
+                        return false;
+                    }
+                    set.add(A[row][col]);
+                } else {
+                    set.add(A[row][col]);
+                }
+
+                //when last row & col in array is visited, set end condition
+                if(col == A[row].length - 1 && row == A.length - 1) {
+                    proceed = false;
+                }
             }
             row++;
+
             //every time you went over all the rows,
-            //move to the next grids to the right
+            //move to the next grid to the right
             if(row == A.length) {
                 a++;
                 b++;
+                set.clear();
             }
         }
 
-        return false;
+        return true;
     }
 
     public static void main(String[] args) {
@@ -515,9 +534,17 @@ public class Epi6 {
         //System.out.println(maxProductMinusOne(a));
         //A.show(a);
 
-        int i = 9;
-        int alen = 9;
-        System.out.println(i % alen);
+        int[][] a = { {4,5,6,1,2,3,6,5,4},
+                      {1,2,3,4,5,6,7,8,9},
+                      {8,7,9,9,7,8,3,2,1},
+                      {0,0,0,1,2,3,1,2,3},
+                      {1,2,3,0,0,0,0,0,0},
+                      {0,0,0,0,0,0,0,0,0},
+                      {0,0,0,0,0,0,0,0,0},
+                      {4,1,6,7,8,9,0,0,0},
+                      {0,0,0,0,0,0,7,8,9} };
+
+        System.out.println(isSudokuValid(a));
 
     }
 }
