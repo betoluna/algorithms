@@ -523,6 +523,49 @@ public class Epi6 {
         return true;
     }
 
+    public static void show2dSpiral(int[][] A) {
+        //assume rectangular matrix
+        int rowLo = 0, rowHi = A.length - 1, colLo = 0 , colHi = A[0].length - 1, i, j;
+        int visited = 0, entries = A.length * A[0].length;
+
+        while(visited <= entries) {
+            i = rowLo;
+            j = colLo;
+            //print column downwards
+            while(i <= rowHi) {
+                System.out.print(A[i++][j] + " ");
+                visited++;
+            }
+
+            i -= 1;//stay on last row
+            //print row forwards
+            while(j <= colHi) {
+                System.out.print(A[i][j++] + " ");
+                visited++;
+            }
+
+            j -= 1;//stay on last column
+            //print column upwards
+            while(i >= rowLo) {
+                System.out.print(A[i--][j] + " ");
+                visited++;
+            }
+
+            i += 1;//kick i back to array bounds
+            //print row backwards
+            while(j >= colLo) {
+                System.out.print(A[i][j--] + " ");
+                visited++;
+            }
+
+            //step in one entry towards center of matrix on each side
+            rowLo++;
+            rowHi--;
+            colLo++;
+            colHi--;
+        }
+    }
+
     public static void main(String[] args) {
         //int[] a = {3,5,1,4,1,7};
         //int[] a = {2,1,1,1,1,1};
@@ -542,9 +585,19 @@ public class Epi6 {
                       {0,0,0,0,0,0,0,0,0},
                       {0,0,0,0,0,0,0,0,0},
                       {4,1,6,7,8,9,0,0,0},
-                      {0,0,0,0,0,0,7,8,9} };
+                      {0,0,0,0,0,0,2,8,9} };
 
-        System.out.println(isSudokuValid(a));
+        int[][] b = { {1,2,3},
+                      {4,5,6},
+                      {7,8,9} };
+
+        int[][] c = { {0, 1, 2, 3},
+                      {4, 5, 6, 7},
+                      {8, 9, 10,11},
+                      {12,13,14,15} };
+
+        //System.out.println(isSudokuValid(a));
+        show2dSpiral(b);
 
     }
 }
