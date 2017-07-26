@@ -491,8 +491,8 @@ public class Epi6 {
         Set<Integer> set = new HashSet<>();
         boolean proceed = true;
         for(row = 0; proceed; row %= A.length) {
-            //clear map for next subgrid below
-            if(row == 0 || row == 3 || row == 6) set.clear();
+            //clear set for next subgrid below
+            if(row % gridSize == 0) set.clear();
 
             for(col = a * gridSize; col < b * gridSize; col++) {
                 if(!set.isEmpty()) {
@@ -523,50 +523,108 @@ public class Epi6 {
         return true;
     }
 
-    public static void show2dSpiral(int[][] A) {
-        //assume rectangular matrix
-        int rowLo = 0, rowHi = A.length - 1, colLo = 0 , colHi = A[0].length - 1, i, j;
+    //print 2D array in a counterclockwise spiral
+    public static void spiral2dcounterCW(int[][] A) {
+        int begin = 0, end = A.length;
+        int i = -1, j = begin;
         int visited = 0, entries = A.length * A[0].length;
-
-        while(visited <= entries) {
-            i = rowLo;
-            j = colLo;
-            //print column downwards
-            while(i <= rowHi) {
-                System.out.print(A[i++][j] + " ");
-                visited++;
+        do {
+            //print col downwards
+            while(++i < end) {
+                System.out.print(A[i][j] + " ");
+                ++visited;
             }
+            i -= 1;//kick i back to within bounds
+            end = A[i].length - begin;//reset end
+            System.out.println();
 
-            i -= 1;//stay on last row
             //print row forwards
-            while(j <= colHi) {
-                System.out.print(A[i][j++] + " ");
-                visited++;
+            while(visited != entries && ++j < end) {
+                System.out.print(A[i][j] + " ");
+                ++visited;
             }
+            j -= 1;//kick j back to within bounds
+            end = begin;//reset end, prepare to print upwards
+            System.out.println();
 
-            j -= 1;//stay on last column
-            //print column upwards
-            while(i >= rowLo) {
-                System.out.print(A[i--][j] + " ");
-                visited++;
+            //print col upwards
+            while(visited != entries && --i >= end) {
+                System.out.print(A[i][j] + " ");
+                ++visited;
             }
+            i += 1;//kick i back to within bounds
+            System.out.println();
 
-            i += 1;//kick i back to array bounds
-            //print row backwards
-            while(j >= colLo) {
-                System.out.print(A[i][j--] + " ");
-                visited++;
+            //print row backwards but, don't print
+            //the one you started with (for this circle)
+            while(visited != entries && --j > end) {
+                System.out.print(A[i][j] + " ");
+                ++visited;
             }
+            if(visited == entries) break;
+            j += 1;//set j to the next col
+            System.out.println();
 
-            //step in one entry towards center of matrix on each side
-            rowLo++;
-            rowHi--;
-            colLo++;
-            colHi--;
+            //step in by one in the spiral
+            begin += 1;
+            i = begin - 1;
+            end = A.length - begin;//shorten the run by one
+
+        } while(visited < entries);
+    }
+
+    //print square matrix (2d array) clockwise
+    public static List<Integer> spiral2dClockwise(int[][] A) {
+        List<Integer> list = new ArrayList<>();
+        int row = 0, col = 0, direction = -1;//initial values
+        boolean redirect = true;
+        int hi = A.length - 1, lo = 0;
+        for(int k = 0; k < A.length * A.length; k++) {
+            if(redirect) {
+                direction = (direction + 1) % 4;//set/change direction
+            }
+            redirect = false;
+
+            switch(direction) {
+                //col move forwards
+                case 0:
+                    list.add(A[row][col++]);
+                    if(col == hi) redirect = true;
+                    break;
+                //row move downwards
+                case 1:
+                    list.add(A[row++][col]);
+                    if(row == hi) redirect = true;
+                    break;
+                //col move backwards
+                case 2:
+                    list.add(A[row][col--]);
+                    if(col == lo) redirect = true;
+                    break;
+                //row move upwards
+                case 3:
+                    list.add(A[row--][col]);
+                    if(row == lo + 1) {//before revisiting the one from where turn started
+                        //reset lo & hi
+                        lo += 1;
+                        hi -= 1;
+                        redirect = true;
+                    }
+                    break;
+                default:
+                    break;
+
+            }
         }
+        return list;
     }
 
     public static void main(String[] args) {
+
+        int[][] b = { {1,2,3},
+                      {4,5,6},
+                      {7,8,9} };
+
         //int[] a = {3,5,1,4,1,7};
         //int[] a = {2,1,1,1,1,1};
         //int[] a = {1,2,3,3,3,3,4};
@@ -580,24 +638,35 @@ public class Epi6 {
         int[][] a = { {4,5,6,1,2,3,6,5,4},
                       {1,2,3,4,5,6,7,8,9},
                       {8,7,9,9,7,8,3,2,1},
-                      {0,0,0,1,2,3,1,2,3},
-                      {1,2,3,0,0,0,0,0,0},
-                      {0,0,0,0,0,0,0,0,0},
-                      {0,0,0,0,0,0,0,0,0},
-                      {4,1,6,7,8,9,0,0,0},
-                      {0,0,0,0,0,0,2,8,9} };
+                      {1,0,0,1,2,3,1,2,3},
+                      {1,2,3,0,4,0,6,0,2},
+                      {9,0,8,0,3,0,5,0,7},
+                      {0,4,0,5,0,6,0,7,0},
+                      {4,1,6,7,8,9,0,0,7},
+                      {0,3,0,4,0,0,2,8,9} };
 
-        int[][] b = { {1,2,3},
-                      {4,5,6},
-                      {7,8,9} };
+//        List<List<Integer>> l = Arrays.asList(Arrays.asList(1,2), Arrays.asList(3,4));
+//        for(int i = 0; i < l.size(); i++) {
+//            for(int j = 0; j < l.get(0).size(); j++) {
+//                System.out.print(l.get(i).get(j) + " ");
+//            }
+//        }
+//
+//        l.get(1).set(1, 10);
+//        System.out.println("   " + l.get(1).get(1));
+//        for(int i = 0; i < l.size(); i++) {
+//            for(int j = 0; j < l.get(0).size(); j++) {
+//                System.out.print(l.get(i).get(j) + " ");
+//            }
+//        }
 
-        int[][] c = { {0, 1, 2, 3},
-                      {4, 5, 6, 7},
-                      {8, 9, 10,11},
-                      {12,13,14,15} };
+
+        //for(Integer i : l) System.out.print(i + " ");
 
         //System.out.println(isSudokuValid(a));
-        show2dSpiral(b);
-
+        //spiral2d(a);
+        List<Integer> l2 = spiral2dClockwise(a);
+        for(Integer i : l2) System.out.print(i + " ");
+        System.out.println("l2 size = " + l2.size());
     }
 }
