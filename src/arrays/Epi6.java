@@ -573,7 +573,7 @@ public class Epi6 {
         } while(visited < entries);
     }
 
-    //print square matrix (2d array) clockwise
+    //compute square matrix (2d array) clockwise
     public static List<Integer> spiral2dClockwise(int[][] A) {
         List<Integer> list = new ArrayList<>();
         int row = 0, col = 0, direction = -1;//initial values
@@ -586,25 +586,25 @@ public class Epi6 {
             redirect = false;
 
             switch(direction) {
-                //col move forwards
+                //go right (row stays constant)
                 case 0:
                     list.add(A[row][col++]);
                     if(col == hi) redirect = true;
                     break;
-                //row move downwards
+                //go down (col stays constant)
                 case 1:
                     list.add(A[row++][col]);
                     if(row == hi) redirect = true;
                     break;
-                //col move backwards
+                //go left (row stays constant)
                 case 2:
                     list.add(A[row][col--]);
                     if(col == lo) redirect = true;
                     break;
-                //row move upwards
+                //go back up (col stays constant)
                 case 3:
                     list.add(A[row--][col]);
-                    if(row == lo + 1) {//before revisiting the one from where turn started
+                    if(row == lo + 1) {//stop before revisiting starting elem for current turn
                         //reset lo & hi
                         lo += 1;
                         hi -= 1;
@@ -613,13 +613,69 @@ public class Epi6 {
                     break;
                 default:
                     break;
+            }
+        }
+        return list;
+    }
 
+    //Another way. Cached array of enum values for better
+    //performance if values() is called a lot.
+//    public enum Direction { RIGHT, DOWN, LEFT, UP;
+//        public static final Direction[] values = values(); };
+
+    public enum Direction { RIGHT, DOWN, LEFT, UP };
+
+    //compute square matrix (2d array) clockwise
+    public static List<Integer> spiral2dClockwiseEnum(int[][] A) {
+        List<Integer> list = new ArrayList<>();
+        int row = 0, col = 0, ordinal = -1;
+        Direction direction = Direction.RIGHT;
+        boolean redirect = true;
+        int hi = A.length - 1, lo = 0;
+        for(int k = 0; k < A.length * A.length; k++) {
+            if(redirect) {
+                direction = Direction.values()[++ordinal % 4];//set/change direction
+                //direction = (direction + 1) % 4; //if direction is of int type
+            }
+            redirect = false;
+
+            switch(direction) {
+                //go right (row stays constant)
+                case RIGHT:
+                    list.add(A[row][col++]);
+                    if(col == hi) redirect = true;
+                    break;
+                //go down (col stays constant)
+                case DOWN:
+                    list.add(A[row++][col]);
+                    if(row == hi) redirect = true;
+                    break;
+                //go left (row stays constant)
+                case LEFT:
+                    list.add(A[row][col--]);
+                    if(col == lo) redirect = true;
+                    break;
+                //go back up (col stays constant)
+                case UP:
+                    list.add(A[row--][col]);
+                    if(row == lo + 1) {//stop before revisiting starting elem for current turn
+                        //reset lo & hi
+                        lo += 1;
+                        hi -= 1;
+                        redirect = true;
+                    }
+                    break;
+                default:
+                    break;
             }
         }
         return list;
     }
 
     public static void main(String[] args) {
+
+//        System.out.println(Direction.values()[0] + " " + Direction.values()[1] + " " + Direction.values()[2] +
+//        " " + Direction.values()[3]);
 
         int[][] b = { {1,2,3},
                       {4,5,6},
@@ -665,8 +721,8 @@ public class Epi6 {
 
         //System.out.println(isSudokuValid(a));
         //spiral2d(a);
-        List<Integer> l2 = spiral2dClockwise(a);
+        List<Integer> l2 = spiral2dClockwiseEnum(a);
         for(Integer i : l2) System.out.print(i + " ");
-        System.out.println("l2 size = " + l2.size());
+
     }
 }
